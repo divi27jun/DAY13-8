@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Product List</title>
+<style>
+.card {
+  border:1px solid #ccc;
+  padding:10px;
+  margin:10px;
+  width:200px;
+  display:inline-block;
+}
+</style>
+</head>
+<body>
+
+<h2>Products</h2>
+<p id="status">Loading...</p>
+<div id="products"></div>
+
+<script>
+fetch("https://fakestoreapi.com/products")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("status").innerText = "";
+
+    const container = document.getElementById("products");
+
+    data.forEach(p => {
+      container.innerHTML += `
+        <div class="card">
+          <h4>${p.title}</h4>
+          <p>Price: $${p.price}</p>
+          <p>Category: ${p.category}</p>
+        </div>`;
+    });
+  })
+  .catch(() => {
+    document.getElementById("status").innerText =
+      "Failed to load products";
+  });
+</script>
+
+</body>
+</html>

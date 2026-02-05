@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fetch & Error Practice</title>
+  <style>
+    body { font-family: Arial; }
+    table, td, th { border:1px solid black; border-collapse: collapse; padding:6px; }
+  </style>
+</head>
+
+<body>
+
+<h2>Fetch & Error Handling Tasks</h2>
+
+<button onclick="fetchUsers()">Load Users</button>
+<button onclick="refreshData()">Refresh Data</button>
+
+<p id="status"></p>
+<div id="output"></div>
+
+<script>
+// ---------- BASIC FETCH ----------
+
+// 1 & 2 Fetch JSON
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+.then(r => r.json())
+.then(d => console.log("1 & 2:", d));
+
+// 3 Fetch text
+fetch("https://jsonplaceholder.typicode.com/posts/1")
+.then(r => r.text())
+.then(t => console.log("3:", t));
+
+// 4 Display inside div
+function showData(text) {
+  document.getElementById("output").innerHTML = text;
+}
+
+// ---------- USERS LIST ----------
+
+// 5 Fetch names
+function fetchUsers() {
+  document.getElementById("status").innerText = "Loading...";
+  document.getElementById("output").innerHTML = "";
+
+  fetch("https://jsonplaceholder.typicode.com/users")
+    .then(r => r.json())
+    .then(users => {
+      document.getElementById("status").innerText = "";
+
+      let list = "<ul>";
+      users.forEach(u => list += `<li>${u.name}</li>`);
+      list += "</ul>";
+
+      showData(list);
+    })
+    .catch(() => {
+      document.getElementById("status").innerText = "Error loading users";
+    });
+}
+
+// 6 First 5 posts
+fetch("https://jsonplaceholder.typicode.com/posts")
+.then(r => r.json())
+.then(posts => console.log("6:", posts.slice(0,5)));
+
+// 7 Success .then already shown
+// 8 & 9 Error handling shown above
+
+// 10 Button click handled above
+
+// 11 Page load fetch
+window.onload = fetchUsers;
+
+// ---------- ASYNC/AWAIT ----------
+
+// 12–14 function fetch
+async function getData() {
+  const res = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+  const data = await res.json();
+  console.log("12–14:", data);
+}
+getData();
+
+// ---------- TABLE DISPLAY ----------
+
+// 15 Table display
+async function showTable() {
+  let res = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+  let data = await res.json();
+
+  let table = "<table><tr><th>Name</th><th>Email</th></tr>";
+
+  data.forEach(u => {
+    table += `<tr><td>${u.name}</td><td>${u.email}</td></tr>`;
+  });
+
+  table += "</table>";
+  showData(table);
+}
+
+// ---------- LIST DISPLAY ----------
+
+// 16 List display
+async function showList() {
+  let res = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+  let data = await res.json();
+
+  let list = "<ul>";
+  data.forEach(u => list += `<li>${u.name}</li>`);
+  list += "</ul>";
+
+  showData(list);
+}
+
+// ---------- USER BY ID ----------
+
+// 17 Fetch by ID
+async function userById(id) {
+  let res = await fetch(
+    `https://jsonplaceholder.typicode.com/users/${id}`
+  );
+  let data = await res.json();
+  console.log("17:", data);
+}
+
+// ---------- LOADING ----------
+
+// 18 & 19 Loading messages handled above
+
+// ---------- SPECIFIC FIELDS ----------
+
+// 20
+async function specificFields() {
+  let res = await fetch(
+    "https://jsonplaceholder.typicode.com/users"
+  );
+  let data = await res.json();
+
+  console.log(data.map(u => ({
+    name: u.name,
+    city: u.address.city
+  })));
+}
+specificFields();
+
+// ---------- RESPONSE STATUS ----------
+
+// 22–25
+fetch("https://jsonplaceholder.typicode.com/posts")
+.then(res => {
+  console.log("23 Status:", res.status);
+  console.log("25 Headers:", [...res.headers]);
+  return res.json();
+})
+.then(data => console.log("Data loaded"))
+.catch(console.log);
+
+// ---------- INVALID URL ----------
+
+// 26
+fetch("https://wrongurl.typicode.com")
+.catch(() => console.log("26 Invalid URL error"));
+
+// ---------- TRY CATCH FETCH ----------
+
+// 27–28
+async function safeFetch() {
+  try {
+    let res = await fetch("badurl");
+    let data = await res.json();
+  } catch {
+    console.log("28 Showing fallback data");
+  }
+}
+safeFetch();
+
+// ---------- REFRESH ----------
+
+// 29 & 30
+function refreshData() {
+  document.getElementById("output").innerHTML = "";
+  fetchUsers();
+}
+
+// ---------- ERROR EXAMPLES ----------
+
+// 33 Reference Error
+// console.log(x);
+
+// 35 Type Error
+// null.toUpperCase();
+
+// 37 Range Error
+// new Array(-1);
+
+// 39 URI Error
+// decodeURI("%");
+
+// ---------- TRY CATCH ----------
+
+// 46–52
+try {
+  let a = 5;
+  console.log(a);
+} catch (e) {
+  console.log(e.message);
+} finally {
+  console.log("51 Finally runs");
+}
+
+// ---------- DIVISION CHECK ----------
+
+// 53
+function divide(a, b) {
+  try {
+    if (b === 0) throw "Cannot divide by zero";
+    return a / b;
+  } catch (e) {
+    console.log(e);
+  }
+}
+divide(5,0);
+
+// ---------- CUSTOM ERRORS ----------
+
+// 57–60
+function validateAge(age) {
+  if (age < 18) throw new Error("Age too small");
+}
+try {
+  validateAge(15);
+} catch (e) {
+  console.log(e.message);
+}
+
+// ---------- DEBUGGER ----------
+
+// 66
+function debugExample() {
+  let a = 5;
+  debugger;
+  console.log(a);
+}
+debugExample();
+
+</script>
+
+</body>
+</html>

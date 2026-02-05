@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        console.log("Program Started");
+
+// Task 1
+setTimeout(() => console.log("Hello after 2 sec"), 2000);
+
+// Task 2
+let n = 1;
+let int1 = setInterval(() => {
+  console.log("Number:", n++);
+  if (n > 5) clearInterval(int1);
+}, 1000);
+
+// Task 3
+console.log("Loading...");
+setTimeout(() => console.log("Data Loaded"), 3000);
+
+// Task 4
+console.log("Start");
+setTimeout(() => console.log("Async Message"), 0);
+console.log("End");
+
+// Task 5
+function delay() {
+  setTimeout(() => console.log("Delay function done"), 2000);
+}
+delay();
+
+// Task 6
+let count = 0;
+let int2 = setInterval(() => {
+  console.log("Interval Count:", ++count);
+  if (count === 5) clearInterval(int2);
+}, 1000);
+
+// Task 7
+let t = 0;
+let clock = setInterval(() => {
+  console.log("Time:", new Date().toLocaleTimeString());
+  if (++t === 5) clearInterval(clock);
+}, 1000);
+
+// Task 19 & 20 Promise
+new Promise(res => {
+  setTimeout(() => res("Promise Resolved"), 2000);
+}).then(console.log);
+
+// Task 28 async wait
+async function waitMsg() {
+  await new Promise(res => setTimeout(res, 3000));
+  console.log("Waited 3 seconds");
+}
+waitMsg();
+
+    </script>
+</body>
+</html>

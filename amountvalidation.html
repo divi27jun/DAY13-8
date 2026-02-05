@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Validation</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      width: 200px;
+    }
+
+    #message {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+
+<body>
+
+<h2>Payment Amount Validation</h2>
+
+<input type="text" id="amount" placeholder="Enter payment amount">
+<br>
+<button onclick="validatePayment()">Pay Now</button>
+
+<p id="message"></p>
+
+<script>
+function validatePayment() {
+  const amountInput = document.getElementById("amount").value.trim();
+  const message = document.getElementById("message");
+
+  try {
+    // Empty check
+    if (amountInput === "")
+      throw new Error("Payment amount cannot be empty.");
+
+    // Numeric check
+    if (isNaN(amountInput))
+      throw new Error("Please enter a valid numeric amount.");
+
+    const amount = Number(amountInput);
+
+    // Negative check
+    if (amount <= 0)
+      throw new Error("Amount must be greater than zero.");
+
+    // Success
+    message.innerText = `Payment of ₹${amount} successful!`;
+    message.className = "success";
+
+  } catch (error) {
+    message.innerText = error.message;
+    message.className = "error";
+  }
+}
+</script>
+
+</body>
+</html>

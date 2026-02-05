@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Profile Viewer</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 80px;
+    }
+
+    #profile {
+      border: 1px solid #ccc;
+      padding: 20px;
+      width: 300px;
+      margin: auto;
+      border-radius: 8px;
+    }
+
+    button {
+      padding: 10px 15px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>User Profile Viewer</h2>
+
+<div id="profile">
+  <p>Click button to load user</p>
+</div>
+
+<button onclick="nextUser()">Load Next User</button>
+
+<script>
+let users = [];
+let index = 0;
+
+// Fetch users once
+async function loadUsers() {
+  const profile = document.getElementById("profile");
+  profile.innerHTML = "Loading users...";
+
+  try {
+    const res = await fetch(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    users = await res.json();
+
+    showUser();
+  } catch {
+    profile.innerHTML = "Failed to load users.";
+  }
+}
+
+// Display user
+function showUser() {
+  if (!users.length) return;
+
+  const user = users[index];
+  const profile = document.getElementById("profile");
+
+  profile.innerHTML = `
+    <h3>${user.name}</h3>
+    <p>Email: ${user.email}</p>
+    <p>City: ${user.address.city}</p>
+  `;
+}
+
+// Next user button
+function nextUser() {
+  if (!users.length) {
+    loadUsers();
+    return;
+  }
+
+  index = (index + 1) % users.length;
+  showUser();
+}
+</script>
+
+</body>
+</html>
